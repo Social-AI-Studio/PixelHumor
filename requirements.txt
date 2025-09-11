@@ -1,0 +1,5 @@
+numpy
+pandas
+jiwer
+tabulate
+scikit-learn
