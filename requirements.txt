@@ -3,3 +3,4 @@ pandas
 jiwer
 tabulate
 scikit-learn
+opencv-python

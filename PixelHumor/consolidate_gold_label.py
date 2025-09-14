@@ -23,12 +23,11 @@ def majority_vote(vote_lists, qid):
         return []
     if qid == 5:
         return [vote for vote, count in vote_count.items() if count >= 2]
-        # return [vote for vote, count in vote_count.items() if count > 2]
     
     return [vote for vote, count in vote_count.items() if count == max_count]
     
 
-df = pd.read_csv('./full_annotation.csv', index_col=False)
+df = pd.read_csv('./annotation.csv', index_col=False)
 df = df.map(safe_eval)
 
 label_consolidate = []
@@ -73,4 +72,12 @@ for idx, row in df.iterrows():
 
 label_df = pd.DataFrame(label_consolidate)
 label_df['Q4'] = label_df['Q4'].apply(lambda x: ['Both'] if x == ["Text", "Visual"] else x)
-label_df.to_csv('./gold_label.csv', index=False)
+
+# Sort by source and comic ID
+label_df['source'] = df['comic_id'].apply(lambda x: x.split('_')[0])
+label_df['ID'] = df['comic_id'].apply(lambda x: int(x.split('_')[-1]))
+
+label_df = label_df.sort_values(['source', 'ID']).reset_index()
+label_df = label_df.drop(columns=['index', 'source', 'ID'])
+
+label_df.to_csv('./subjective_label.csv', index=False)
